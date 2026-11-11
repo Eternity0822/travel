@@ -1,0 +1,7 @@
+Django==5.2.11
+PyMySQL==1.1.2
+django-simpleui==2026.1.13
+openai==1.109.1
+pandas==2.2.3
+requests==2.32.3
+jieba==0.42.1

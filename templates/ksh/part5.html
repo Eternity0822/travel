@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    <!-- Page-header start -->
+    <div class="page-header">
+                            <div class="page-block">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <div class="page-header-title">
+                                            <h5 class="m-b-10">各地区景点数量</h5>
+                                            <p class="m-b-0">景点地图</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul class="breadcrumb-title">
+                                            <li class="breadcrumb-item">
+                                                <a href="{% url 'home:index' %}"> <i class="fa fa-home"></i> </a>
+                                            </li>
+                                            <li class="breadcrumb-item"><a href="#!">数据分析可视化</a>
+                                            </li>
+                                            <li class="breadcrumb-item"><a href="#!">景点地图</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+    </div>
+    <!-- Page-header end -->
+    <div class="pcoded-inner-content">
+                            <!-- Main-body start -->
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="page-body">
+                                        <div class="row">
+                                            <!-- 表 -->
+                                            <div class="col-md-12 col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h5>各地区景点数量</h5>
+                                                    </div>
+                                                    <div class="card-block accordion-block">
+                                                        <div class="accordion-box" id="part5" style="width: 100%; height: 600px;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="styleSelector">
+
+                            </div>
+    </div>
+    
+    <script src="{% static 'assets/js/echarts/echarts.min.js' %}"></script>
+    <script src="{% static 'assets/js/china.js' %}"></script>
+    <script>
+        var myChart = echarts.init(document.getElementById('part5'));
+        var mydata = 
+        {{ mapData | safe }}
+        var options = {
+            tooltip: {
+                triggerOn: "mousemove",
+                padding: 8,
+                borderWidth: 1,
+                borderColor: '#409eff',
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                textStyle: {
+                    color: '#000',
+                    fontSize: 12
+                },
+                formatter: function (e, t, n) {
+                    let data = e.data;
+                    return data ? '城市：' + data.name + '\t景点数：' + data.value : '暂未拥有数据'
+                }
+            },
+            visualMap: {
+                show: true,
+                left: 26,
+                bottom: 40,
+                showLabel: true,
+                pieces: [
+                    {
+                        gte: 300,
+                        label: ">= 300",
+                        color: "#ff7979"
+                    },
+                    {
+                        gte: 150,
+                        lt: 300,
+                        label: "150 - 300",
+                        color: "#badc58"
+                    },
+                    {
+                        gte: 100,
+                        lt: 150,
+                        label: "100 - 150",
+                        color: "#ffbe76"
+                    },
+                    {
+                        gte: 50,
+                        lt: 100,
+                        label: "50 - 100",
+                        color: "#f6e58d"
+                    },
+                    {
+                        gte: 10,
+                        lt: 50,
+                        label: "10 - 50",
+                        color: "#7ed6df"
+                    },
+                    {
+                        lt: 10,
+                        label: '<10',
+                        color: "orange"
+                    }
+                ]
+            },
+            geo: {
+                map: "china",
+                roam: true,
+                scaleLimit: {
+                    min: 1,
+                    max: 2
+                },
+                zoom: 1,
+                top: 10,
+                layoutSize: "100%", //保持地图宽高比
+                label: {
+                    normal: {
+                        show: true,
+                        fontSize: "14",
+                        color: "#fff"
+                    },
+                    emphasis: {
+                        show: false,
+                        textStyle: {
+                            color: "#F3F3F3"
+                        }
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        borderColor: "rgba(0, 0, 0, 0.4)",
+                        areaColor: '#45b4b4',
+                    },
+                    emphasis: {
+                        areaColor: "orange",
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0,
+                        borderWidth: 0
+                    }
+                }
+            },
+            series: [
+                {
+                    name: "成果预览",
+                    type: "map",
+                    geoIndex: 0,
+                    data: mydata
+                }
+            ]
+        }
+        myChart.setOption(options);
+    </script>
+
+
+{% endblock %}
