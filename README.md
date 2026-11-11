@@ -70,7 +70,7 @@ travel/
 ### 1. 安装依赖
 
 ```bash
-git clone <仓库地址>
+git clone https://github.com/Eternity0822/travel.git
 cd travel
 
 python -m venv venv
@@ -141,7 +141,7 @@ python manage.py runserver
 
 ### 5. 配置 DeepSeek API Key（AI 路线推荐）
 
-API Key **不再硬编码在代码中**，统一从环境变量 `DEEPSEEK_API_KEY` 读取：
+API Key 统一从环境变量 `DEEPSEEK_API_KEY` 读取：
 
 ```bash
 # Windows PowerShell
@@ -153,9 +153,6 @@ export DEEPSEEK_API_KEY="sk-你的key"
 ```
 
 未配置时访问 AI 路线推荐会返回明确的错误提示，不影响其他功能。
-
-> 🔒 安全提示：旧版代码中曾硬编码过一把 DeepSeek API Key（已在本次提交中移除）。
-> 该 key 仍存在于本地历史记录中，建议在 [DeepSeek 开放平台](https://platform.deepseek.com) **删除旧 key 并重新申请**。
 
 ## 📡 路由说明
 
@@ -192,22 +189,6 @@ export DEEPSEEK_API_KEY="sk-你的key"
 | `part6` | 省份景点数量 |
 | `part7` | 各地区热门景点排行（每城市 TOP10） |
 | `part8` | 各省份景点数量与平均评分 |
-
-## 🔒 安全与改进说明
-
-本次已处理：
-
-- ✅ 移除了硬编码在 `AI/Get_Message.py` 中的 DeepSeek API Key，改为从环境变量 `DEEPSEEK_API_KEY` 读取；
-- ✅ 添加 `.gitignore`，`__pycache__`、`media/`、`.env` 等不再入库；
-- ✅ 添加 `requirements.txt`，锁定依赖版本。
-
-仍建议后续改进：
-
-- [ ] 旧版泄露的 API Key 已在历史版本中出现，**务必到 DeepSeek 控制台吊销并换发**；
-- [ ] `config.py` 中的数据库密码为明文，建议同样迁移到环境变量，且不要把真实凭证提交到仓库；
-- [ ] 用户密码目前为明文存储，建议改用 Django 自带 `User` 模型或至少做哈希存储；
-- [ ] `DEBUG = True`、`ALLOWED_HOSTS = []`、CSRF 中间件被注释均为开发态配置，上线前需要调整；
-- [ ] `data/spider.py` 中存在抓包 Cookie 与固定路径，建议参数化并清理。
 
 ## 📄 License
 
